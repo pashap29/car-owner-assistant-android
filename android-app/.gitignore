@@ -1,0 +1,40 @@
+# IDE / OS noise
+.idea/
+*.iml
+.DS_Store
+
+# Local Android SDK binding
+local.properties
+
+# Gradle and local tool caches
+.gradle/
+.gradle-home/
+.gradle-user/
+.GRADL~*/
+.tmp/
+.jdk*/
+gradle-*/
+gradle-*.zip
+
+# Build outputs
+build/
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing and secret files
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+secrets.properties
+secrets.local.properties
+
+# Third-party service configs kept per environment
+google-services.json
+**/google-services.json
+firebase*.json
+
+.jdk*/
+.jdk17.zip
