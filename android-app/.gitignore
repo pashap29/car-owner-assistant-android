@@ -38,3 +38,4 @@ firebase*.json
 
 .jdk*/
 .jdk17.zip
+android-app/.jdk17.zip
