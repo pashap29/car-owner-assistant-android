@@ -1,8 +1,10 @@
 package com.carownerassistant.core.model.repository
 
 import com.carownerassistant.core.model.AppStartMode
+import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.FuelEntrySummary
+import com.carownerassistant.core.model.MileageLedgerSummary
 import com.carownerassistant.core.model.MileageEntrySummary
 import com.carownerassistant.core.model.VehicleDraft
 import com.carownerassistant.core.model.VehicleSummary
@@ -22,6 +24,8 @@ interface VehicleRepository : ActiveVehicleRepository {
 
 interface MileageRepository {
     fun observeMileage(vehicleId: String): Flow<List<MileageEntrySummary>>
+    fun observeMileageLedger(vehicleId: String): Flow<MileageLedgerSummary>
+    suspend fun addMileageEntry(draft: MileageEntryDraft): String
 }
 
 interface FuelRepository {

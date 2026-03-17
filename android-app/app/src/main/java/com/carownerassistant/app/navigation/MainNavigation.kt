@@ -21,12 +21,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.carownerassistant.core.files.AppFileStore
 import com.carownerassistant.core.navigation.AppRoutes
 import com.carownerassistant.core.navigation.BottomTabRoutes
+import com.carownerassistant.core.model.repository.MileageRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
 import com.carownerassistant.core.model.repository.VehicleRepository
 import com.carownerassistant.feature.expense.ExpenseTabScreen
 import com.carownerassistant.feature.fuel.FuelTabScreen
+import com.carownerassistant.feature.mileage.MileageRoute
 import com.carownerassistant.feature.service.ServiceTabScreen
 import com.carownerassistant.feature.settings.SettingsTabScreen
 import com.carownerassistant.feature.statistics.StatisticsTabScreen
@@ -50,7 +53,9 @@ private val tabs = listOf(
 fun MainNavigation(
     startDestination: String,
     vehicleRepository: VehicleRepository,
+    mileageRepository: MileageRepository,
     settingsRepository: SettingsRepository,
+    appFileStore: AppFileStore,
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -102,10 +107,30 @@ fun MainNavigation(
                     onBack = { navController.popBackStack() },
                 )
             }
-            composable(AppRoutes.FUEL) { FuelTabScreen() }
+            composable(AppRoutes.MILEAGE_LEDGER) {
+                MileageRoute(
+                    vehicleRepository = vehicleRepository,
+                    mileageRepository = mileageRepository,
+                    appFileStore = appFileStore,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(AppRoutes.FUEL) {
+                FuelTabScreen(
+                    onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
+                )
+            }
             composable(AppRoutes.EXPENSE) { ExpenseTabScreen() }
-            composable(AppRoutes.SERVICE) { ServiceTabScreen() }
-            composable(AppRoutes.STATISTICS) { StatisticsTabScreen() }
+            composable(AppRoutes.SERVICE) {
+                ServiceTabScreen(
+                    onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
+                )
+            }
+            composable(AppRoutes.STATISTICS) {
+                StatisticsTabScreen(
+                    onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
+                )
+            }
             composable(AppRoutes.SETTINGS) {
                 SettingsTabScreen(
                     onOpenGarage = { navController.navigate(AppRoutes.GARAGE) },

@@ -11,6 +11,25 @@ enum class MileageStatus {
     CONFLICTED,
 }
 
+enum class DistanceUnit {
+    KM,
+    MI,
+}
+
+enum class MileageEntryOrigin {
+    DEDICATED_MILEAGE,
+    FUEL_CONTEXT,
+    SERVICE_CONTEXT,
+}
+
+enum class MileageAnomalyType {
+    REGRESSION,
+    SAME_DAY_VARIANCE,
+    SAME_DAY_CONFLICT,
+    LARGE_JUMP_SUSPECTED,
+    NEARBY_TOLERANCE_APPLIED,
+}
+
 data class VehicleSummary(
     val id: String,
     val displayName: String,
@@ -41,6 +60,39 @@ data class MileageEntrySummary(
     val timestampEpochMillis: Long,
     val reading: OdometerReading,
     val status: MileageStatus,
+    val origin: MileageEntryOrigin,
+    val userEnteredValue: Double,
+    val userEnteredUnit: DistanceUnit,
+    val photoFilePath: String?,
+    val manualEntry: Boolean,
+    val criticalAnomaly: Boolean,
+    val largeJumpSuspected: Boolean,
+    val trustedReferenceEntryId: String?,
+    val trustScore: Int,
+    val anomalyTypes: List<MileageAnomalyType>,
+)
+
+data class MileageEntryDraft(
+    val vehicleId: String,
+    val timestampEpochMillis: Long,
+    val value: Double,
+    val inputUnit: DistanceUnit,
+    val photoFilePath: String?,
+    val origin: MileageEntryOrigin = MileageEntryOrigin.DEDICATED_MILEAGE,
+    val manualEntry: Boolean = true,
+)
+
+data class MileageLedgerSummary(
+    val entries: List<MileageEntrySummary>,
+    val anomalyLog: List<MileageAnomalyLogItem>,
+    val overallTrustScore: Int,
+)
+
+data class MileageAnomalyLogItem(
+    val mileageEntryId: String,
+    val timestampEpochMillis: Long,
+    val type: MileageAnomalyType,
+    val message: String,
 )
 
 data class FuelEntrySummary(
