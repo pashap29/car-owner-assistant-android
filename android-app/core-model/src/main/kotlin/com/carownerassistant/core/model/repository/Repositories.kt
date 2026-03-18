@@ -1,6 +1,8 @@
 package com.carownerassistant.core.model.repository
 
 import com.carownerassistant.core.model.AppStartMode
+import com.carownerassistant.core.model.ExpenseEntryDraft
+import com.carownerassistant.core.model.ExpenseFilter
 import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.FuelEntrySummary
@@ -34,6 +36,13 @@ interface FuelRepository {
 
 interface ExpenseRepository {
     fun observeExpenses(vehicleId: String): Flow<List<ExpenseEntrySummary>>
+    suspend fun createExpense(draft: ExpenseEntryDraft): String
+    suspend fun updateExpense(expenseId: String, draft: ExpenseEntryDraft)
+    suspend fun deleteExpense(expenseId: String)
+    suspend fun searchExpenses(
+        vehicleId: String,
+        filter: ExpenseFilter,
+    ): List<ExpenseEntrySummary>
 }
 
 interface ServiceRepository {

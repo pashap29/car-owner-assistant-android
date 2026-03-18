@@ -5,21 +5,24 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.carownerassistant.core.database.dao.FuelDao
+import com.carownerassistant.core.database.dao.ExpenseDao
 import com.carownerassistant.core.database.dao.MileageDao
 import com.carownerassistant.core.database.dao.VehicleDao
+import com.carownerassistant.core.database.entity.ExpenseEntryEntity
 import com.carownerassistant.core.database.entity.FuelEntryEntity
 import com.carownerassistant.core.database.entity.MileageEntryEntity
 import com.carownerassistant.core.database.entity.VehicleEntity
 
 @Database(
-    entities = [VehicleEntity::class, MileageEntryEntity::class, FuelEntryEntity::class],
-    version = 3,
+    entities = [VehicleEntity::class, MileageEntryEntity::class, FuelEntryEntity::class, ExpenseEntryEntity::class],
+    version = 4,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun vehicleDao(): VehicleDao
     abstract fun mileageDao(): MileageDao
     abstract fun fuelDao(): FuelDao
+    abstract fun expenseDao(): ExpenseDao
 
     companion object {
         const val NAME: String = "car_owner_assistant.db"
@@ -63,6 +66,26 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 database.execSQL(
                     "ALTER TABLE mileage_entry ADD COLUMN anomalyFlagsCsv TEXT NOT NULL DEFAULT ''",
+                )
+            }
+        }
+
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS expense_entry (
+                        expenseEntryId TEXT NOT NULL PRIMARY KEY,
+                        vehicleId TEXT NOT NULL,
+                        timestampEpochMillis INTEGER NOT NULL,
+                        category TEXT NOT NULL,
+                        totalAmount REAL NOT NULL,
+                        note TEXT NOT NULL,
+                        attachmentPath TEXT,
+                        odometerKm REAL,
+                        odometerMi REAL
+                    )
+                    """.trimIndent(),
                 )
             }
         }

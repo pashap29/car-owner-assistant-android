@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.carownerassistant.core.files.AppFileStore
 import com.carownerassistant.core.navigation.AppRoutes
 import com.carownerassistant.core.navigation.BottomTabRoutes
+import com.carownerassistant.core.model.repository.ExpenseRepository
 import com.carownerassistant.core.model.repository.MileageRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
 import com.carownerassistant.core.model.repository.VehicleRepository
@@ -53,6 +54,7 @@ private val tabs = listOf(
 fun MainNavigation(
     startDestination: String,
     vehicleRepository: VehicleRepository,
+    expenseRepository: ExpenseRepository,
     mileageRepository: MileageRepository,
     settingsRepository: SettingsRepository,
     appFileStore: AppFileStore,
@@ -120,7 +122,13 @@ fun MainNavigation(
                     onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
                 )
             }
-            composable(AppRoutes.EXPENSE) { ExpenseTabScreen() }
+            composable(AppRoutes.EXPENSE) {
+                ExpenseTabScreen(
+                    vehicleRepository = vehicleRepository,
+                    expenseRepository = expenseRepository,
+                    appFileStore = appFileStore,
+                )
+            }
             composable(AppRoutes.SERVICE) {
                 ServiceTabScreen(
                     onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },

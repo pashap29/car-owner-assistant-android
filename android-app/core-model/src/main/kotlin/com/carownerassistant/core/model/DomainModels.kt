@@ -104,10 +104,41 @@ data class FuelEntrySummary(
     val isFullTank: Boolean,
 )
 
+enum class ExpenseCategory {
+    MAINTENANCE,
+    REPAIR,
+    TIRES,
+    INSURANCE,
+    TAX,
+    FINES,
+    PARKING,
+    WASHING,
+    OTHER,
+}
+
 data class ExpenseEntrySummary(
     val id: String,
     val vehicleId: String,
     val timestampEpochMillis: Long,
-    val category: String,
+    val category: ExpenseCategory,
     val totalAmount: Double,
+    val note: String,
+    val attachmentPath: String?,
+    val mileageReading: OdometerReading?,
+)
+
+data class ExpenseEntryDraft(
+    val vehicleId: String,
+    val timestampEpochMillis: Long,
+    val category: ExpenseCategory,
+    val totalAmount: Double,
+    val note: String,
+    val attachmentPath: String?,
+    val mileageValue: Double?,
+    val mileageUnit: DistanceUnit?,
+)
+
+data class ExpenseFilter(
+    val query: String = "",
+    val category: ExpenseCategory? = null,
 )
