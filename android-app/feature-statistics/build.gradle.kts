@@ -30,7 +30,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-model"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")

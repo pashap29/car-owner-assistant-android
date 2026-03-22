@@ -168,6 +168,11 @@ fun MainNavigation(
             }
             composable(AppRoutes.STATISTICS) {
                 StatisticsTabScreen(
+                    vehicleRepository = vehicleRepository,
+                    mileageRepository = mileageRepository,
+                    fuelRepository = fuelRepository,
+                    expenseRepository = expenseRepository,
+                    serviceRepository = serviceRepository,
                     onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
                 )
             }
