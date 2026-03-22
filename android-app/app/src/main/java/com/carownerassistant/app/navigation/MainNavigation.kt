@@ -25,6 +25,7 @@ import com.carownerassistant.core.files.AppFileStore
 import com.carownerassistant.core.navigation.AppRoutes
 import com.carownerassistant.core.navigation.BottomTabRoutes
 import com.carownerassistant.core.model.repository.ExpenseRepository
+import com.carownerassistant.core.model.repository.FuelRepository
 import com.carownerassistant.core.model.repository.MileageRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
 import com.carownerassistant.core.model.repository.VehicleRepository
@@ -54,6 +55,7 @@ private val tabs = listOf(
 fun MainNavigation(
     startDestination: String,
     vehicleRepository: VehicleRepository,
+    fuelRepository: FuelRepository,
     expenseRepository: ExpenseRepository,
     mileageRepository: MileageRepository,
     settingsRepository: SettingsRepository,
@@ -119,6 +121,9 @@ fun MainNavigation(
             }
             composable(AppRoutes.FUEL) {
                 FuelTabScreen(
+                    vehicleRepository = vehicleRepository,
+                    fuelRepository = fuelRepository,
+                    mileageRepository = mileageRepository,
                     onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
                 )
             }

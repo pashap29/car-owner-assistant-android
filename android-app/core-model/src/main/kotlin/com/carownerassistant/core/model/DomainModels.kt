@@ -102,6 +102,44 @@ data class FuelEntrySummary(
     val liters: Double,
     val totalAmount: Double,
     val isFullTank: Boolean,
+    val fuelType: FuelType,
+    val entryMethod: FuelEntryMethod,
+    val odometerReading: OdometerReading?,
+    val mileageDeltaKm: Double?,
+    val qrPayloadRaw: String?,
+)
+
+enum class FuelType {
+    GASOLINE_92,
+    GASOLINE_95,
+    GASOLINE_98,
+    DIESEL,
+    LPG,
+    CNG,
+    OTHER,
+}
+
+enum class FuelEntryMethod {
+    MANUAL,
+    QR_ASSISTED,
+}
+
+data class FuelEntryDraft(
+    val vehicleId: String,
+    val timestampEpochMillis: Long,
+    val liters: Double,
+    val totalAmount: Double,
+    val fuelType: FuelType,
+    val isFullTank: Boolean,
+    val odometerValue: Double?,
+    val odometerUnit: DistanceUnit?,
+    val entryMethod: FuelEntryMethod,
+    val qrPayloadRaw: String?,
+)
+
+data class FuelQrPrefill(
+    val timestampEpochMillis: Long?,
+    val totalAmount: Double?,
 )
 
 enum class ExpenseCategory {

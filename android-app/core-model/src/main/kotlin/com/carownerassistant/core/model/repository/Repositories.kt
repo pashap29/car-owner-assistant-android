@@ -3,6 +3,7 @@ package com.carownerassistant.core.model.repository
 import com.carownerassistant.core.model.AppStartMode
 import com.carownerassistant.core.model.ExpenseEntryDraft
 import com.carownerassistant.core.model.ExpenseFilter
+import com.carownerassistant.core.model.FuelEntryDraft
 import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.FuelEntrySummary
@@ -32,6 +33,7 @@ interface MileageRepository {
 
 interface FuelRepository {
     fun observeFuel(vehicleId: String): Flow<List<FuelEntrySummary>>
+    suspend fun createFuelEntry(draft: FuelEntryDraft): String
 }
 
 interface ExpenseRepository {

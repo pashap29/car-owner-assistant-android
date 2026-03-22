@@ -50,6 +50,7 @@ fun CarOwnerApp() {
             MainNavigation(
                 startDestination = startDestination!!,
                 vehicleRepository = appContainer.vehicleRepository,
+                fuelRepository = appContainer.fuelRepository,
                 expenseRepository = appContainer.expenseRepository,
                 mileageRepository = appContainer.mileageRepository,
                 settingsRepository = appContainer.settingsRepository,

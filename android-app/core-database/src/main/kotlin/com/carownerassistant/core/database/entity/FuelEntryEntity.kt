@@ -11,6 +11,10 @@ data class FuelEntryEntity(
     val liters: Double,
     val totalAmount: Double,
     val isFullTank: Boolean,
+    val fuelType: String,
+    val entryMethod: String,
     val odometerKm: Double?,
     val odometerMi: Double?,
+    val mileageDeltaKm: Double?,
+    val qrPayloadRaw: String?,
 )

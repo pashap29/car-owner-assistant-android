@@ -15,7 +15,7 @@ import com.carownerassistant.core.database.entity.VehicleEntity
 
 @Database(
     entities = [VehicleEntity::class, MileageEntryEntity::class, FuelEntryEntity::class, ExpenseEntryEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -86,6 +86,23 @@ abstract class AppDatabase : RoomDatabase() {
                         odometerMi REAL
                     )
                     """.trimIndent(),
+                )
+            }
+        }
+
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE fuel_entry ADD COLUMN fuelType TEXT NOT NULL DEFAULT 'GASOLINE_95'",
+                )
+                database.execSQL(
+                    "ALTER TABLE fuel_entry ADD COLUMN entryMethod TEXT NOT NULL DEFAULT 'MANUAL'",
+                )
+                database.execSQL(
+                    "ALTER TABLE fuel_entry ADD COLUMN mileageDeltaKm REAL",
+                )
+                database.execSQL(
+                    "ALTER TABLE fuel_entry ADD COLUMN qrPayloadRaw TEXT",
                 )
             }
         }
