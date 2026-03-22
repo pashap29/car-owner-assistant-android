@@ -1,9 +1,13 @@
 package com.carownerassistant.core.model.repository
 
 import com.carownerassistant.core.model.AppStartMode
+import com.carownerassistant.core.model.AppLanguage
+import com.carownerassistant.core.model.AppSettingsSnapshot
+import com.carownerassistant.core.model.DistanceUnit
 import com.carownerassistant.core.model.ExpenseEntryDraft
 import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.ExpenseFilter
+import com.carownerassistant.core.model.FuelVolumeUnit
 import com.carownerassistant.core.model.FuelEntryDraft
 import com.carownerassistant.core.model.FuelEntrySummary
 import com.carownerassistant.core.model.HandbookSectionId
@@ -15,6 +19,7 @@ import com.carownerassistant.core.model.PlaceRef
 import com.carownerassistant.core.model.PlaceSearchCriteria
 import com.carownerassistant.core.model.ServiceEntryDraft
 import com.carownerassistant.core.model.ServiceEntrySummary
+import com.carownerassistant.core.model.UserProfile
 import com.carownerassistant.core.model.VehicleHandbookSummary
 import com.carownerassistant.core.model.VehicleDraft
 import com.carownerassistant.core.model.VehicleSummary
@@ -61,9 +66,18 @@ interface ServiceRepository {
 }
 
 interface SettingsRepository {
+    fun profile(): Flow<UserProfile>
+    fun settings(): Flow<AppSettingsSnapshot>
     fun remindersEnabled(): Flow<Boolean>
     fun appStartMode(): Flow<AppStartMode>
+    suspend fun updateProfile(profile: UserProfile)
     suspend fun setAppStartMode(mode: AppStartMode)
+    suspend fun setLanguage(language: AppLanguage)
+    suspend fun setMileageDisplayUnit(unit: DistanceUnit)
+    suspend fun setFuelVolumeUnit(unit: FuelVolumeUnit)
+    suspend fun setRemindersEnabled(enabled: Boolean)
+    suspend fun setAutoBackupEnabled(enabled: Boolean)
+    suspend fun setBackupIncludeMedia(enabled: Boolean)
 }
 
 interface BackupRepository {

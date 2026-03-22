@@ -178,6 +178,8 @@ fun MainNavigation(
             }
             composable(AppRoutes.SETTINGS) {
                 SettingsTabScreen(
+                    settingsRepository = settingsRepository,
+                    featureFlagRepository = featureFlagRepository,
                     onOpenGarage = { navController.navigate(AppRoutes.GARAGE) },
                     onOpenHandbook = { navController.navigate(AppRoutes.VEHICLE_HANDBOOK) },
                     onOpenPlaces = { navController.navigate(AppRoutes.PLACES) },
