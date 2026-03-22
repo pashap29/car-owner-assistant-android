@@ -1,11 +1,13 @@
 package com.carownerassistant.core.files
 
 import android.content.Context
+import android.net.Uri
 import java.io.File
 
 enum class FileBucket(val relativePath: String) {
     MEDIA_MILEAGE("media/mileage"),
     MEDIA_RECEIPTS("media/receipts"),
+    MEDIA_DOCUMENTS("media/documents"),
     BACKUP("backup"),
     IMPORT_TEMP("cache/import-temp"),
     SCAN_TEMP("cache/scan-temp"),
@@ -30,4 +32,21 @@ class AndroidAppFileStore(
     override fun backupNewFile(): File = File(bucket(FileBucket.BACKUP), "backup-new.zip")
 
     override fun backupOldFile(): File = File(bucket(FileBucket.BACKUP), "backup-old.zip")
+}
+
+fun copyContentUriToFile(
+    context: Context,
+    sourceUri: Uri,
+    destinationFile: File,
+): String? {
+    return runCatching {
+        destinationFile.parentFile?.mkdirs()
+        context.contentResolver.openInputStream(sourceUri)?.use { input ->
+            destinationFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        } ?: return null
+
+        destinationFile.absolutePath
+    }.getOrNull()
 }

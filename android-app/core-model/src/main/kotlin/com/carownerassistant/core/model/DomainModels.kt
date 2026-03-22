@@ -220,3 +220,34 @@ data class ServiceEntryDraft(
     val mileageValue: Double?,
     val mileageUnit: DistanceUnit?,
 )
+
+enum class HandbookSectionId {
+    IDENTIFICATION,
+    INSURANCE,
+    MAINTENANCE_NOTES,
+    TIRE_INFO,
+    EMERGENCY_CONTACTS,
+    GENERAL_NOTES,
+}
+
+data class HandbookSectionSummary(
+    val id: HandbookSectionId,
+    val title: String,
+    val content: String,
+)
+
+data class VehicleDocumentSummary(
+    val id: String,
+    val vehicleId: String,
+    val displayName: String,
+    val mimeType: String,
+    val filePath: String,
+    val createdAtEpochMillis: Long,
+)
+
+data class VehicleHandbookSummary(
+    val vehicleId: String,
+    val vin: String,
+    val sections: List<HandbookSectionSummary>,
+    val documents: List<VehicleDocumentSummary>,
+)

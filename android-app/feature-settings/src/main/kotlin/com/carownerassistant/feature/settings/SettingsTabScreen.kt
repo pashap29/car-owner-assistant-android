@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsTabScreen(
     onOpenGarage: () -> Unit,
+    onOpenHandbook: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -24,6 +25,8 @@ fun SettingsTabScreen(
         Button(onClick = onOpenGarage) {
             Text(text = "Open Garage")
         }
+        Button(onClick = onOpenHandbook) {
+            Text(text = "Open Vehicle Handbook")
+        }
     }
 }
-

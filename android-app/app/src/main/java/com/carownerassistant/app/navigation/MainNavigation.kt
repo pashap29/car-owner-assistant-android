@@ -26,6 +26,7 @@ import com.carownerassistant.core.navigation.AppRoutes
 import com.carownerassistant.core.navigation.BottomTabRoutes
 import com.carownerassistant.core.model.repository.ExpenseRepository
 import com.carownerassistant.core.model.repository.FuelRepository
+import com.carownerassistant.core.model.repository.HandbookRepository
 import com.carownerassistant.core.model.repository.MileageRepository
 import com.carownerassistant.core.model.repository.ServiceRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
@@ -37,6 +38,7 @@ import com.carownerassistant.feature.service.ServiceTabScreen
 import com.carownerassistant.feature.settings.SettingsTabScreen
 import com.carownerassistant.feature.statistics.StatisticsTabScreen
 import com.carownerassistant.feature.vehicle.GarageRoute
+import com.carownerassistant.feature.vehicle.VehicleHandbookRoute
 
 data class BottomTab(
     val route: String,
@@ -57,6 +59,7 @@ fun MainNavigation(
     startDestination: String,
     vehicleRepository: VehicleRepository,
     fuelRepository: FuelRepository,
+    handbookRepository: HandbookRepository,
     expenseRepository: ExpenseRepository,
     mileageRepository: MileageRepository,
     serviceRepository: ServiceRepository,
@@ -113,6 +116,14 @@ fun MainNavigation(
                     onBack = { navController.popBackStack() },
                 )
             }
+            composable(AppRoutes.VEHICLE_HANDBOOK) {
+                VehicleHandbookRoute(
+                    vehicleRepository = vehicleRepository,
+                    handbookRepository = handbookRepository,
+                    appFileStore = appFileStore,
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable(AppRoutes.MILEAGE_LEDGER) {
                 MileageRoute(
                     vehicleRepository = vehicleRepository,
@@ -151,6 +162,7 @@ fun MainNavigation(
             composable(AppRoutes.SETTINGS) {
                 SettingsTabScreen(
                     onOpenGarage = { navController.navigate(AppRoutes.GARAGE) },
+                    onOpenHandbook = { navController.navigate(AppRoutes.VEHICLE_HANDBOOK) },
                 )
             }
         }

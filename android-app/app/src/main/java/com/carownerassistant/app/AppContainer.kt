@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.carownerassistant.core.database.DatabaseFactory
 import com.carownerassistant.core.database.repository.RoomExpenseRepository
 import com.carownerassistant.core.database.repository.RoomFuelRepository
+import com.carownerassistant.core.database.repository.RoomHandbookRepository
 import com.carownerassistant.core.database.repository.RoomMileageRepository
 import com.carownerassistant.core.database.repository.RoomServiceRepository
 import com.carownerassistant.core.database.repository.RoomVehicleRepository
@@ -16,6 +17,7 @@ import com.carownerassistant.core.files.AndroidAppFileStore
 import com.carownerassistant.core.files.AppFileStore
 import com.carownerassistant.core.model.repository.ExpenseRepository
 import com.carownerassistant.core.model.repository.FuelRepository
+import com.carownerassistant.core.model.repository.HandbookRepository
 import com.carownerassistant.core.model.repository.MileageRepository
 import com.carownerassistant.core.model.repository.ServiceRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
@@ -32,6 +34,7 @@ class AppContainer(
     val vehicleRepository: VehicleRepository = RoomVehicleRepository(database)
     val mileageRepository: MileageRepository = RoomMileageRepository(database)
     val fuelRepository: FuelRepository = RoomFuelRepository(database)
+    val handbookRepository: HandbookRepository = RoomHandbookRepository(database)
     val expenseRepository: ExpenseRepository = RoomExpenseRepository(database)
     val serviceRepository: ServiceRepository = RoomServiceRepository(database)
     val settingsRepository: SettingsRepository = DataStoreSettingsRepository(appPreferencesStore)

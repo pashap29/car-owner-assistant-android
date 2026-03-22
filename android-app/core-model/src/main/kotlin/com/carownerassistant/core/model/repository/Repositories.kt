@@ -6,11 +6,13 @@ import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.ExpenseFilter
 import com.carownerassistant.core.model.FuelEntryDraft
 import com.carownerassistant.core.model.FuelEntrySummary
+import com.carownerassistant.core.model.HandbookSectionId
 import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.MileageLedgerSummary
 import com.carownerassistant.core.model.MileageEntrySummary
 import com.carownerassistant.core.model.ServiceEntryDraft
 import com.carownerassistant.core.model.ServiceEntrySummary
+import com.carownerassistant.core.model.VehicleHandbookSummary
 import com.carownerassistant.core.model.VehicleDraft
 import com.carownerassistant.core.model.VehicleSummary
 import kotlinx.coroutines.flow.Flow
@@ -63,4 +65,20 @@ interface SettingsRepository {
 
 interface BackupRepository {
     fun latestBackupSlot(): Flow<String?>
+}
+
+interface HandbookRepository {
+    fun observeHandbook(vehicleId: String): Flow<VehicleHandbookSummary>
+    suspend fun updateVin(vehicleId: String, vin: String)
+    suspend fun updateSection(
+        vehicleId: String,
+        sectionId: HandbookSectionId,
+        content: String,
+    )
+    suspend fun addDocument(
+        vehicleId: String,
+        displayName: String,
+        mimeType: String,
+        filePath: String,
+    ): String
 }

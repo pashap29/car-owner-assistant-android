@@ -5,16 +5,20 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.carownerassistant.core.database.dao.FuelDao
+import com.carownerassistant.core.database.dao.HandbookDao
 import com.carownerassistant.core.database.dao.ExpenseDao
 import com.carownerassistant.core.database.dao.MileageDao
 import com.carownerassistant.core.database.dao.ServiceDao
 import com.carownerassistant.core.database.dao.VehicleDao
 import com.carownerassistant.core.database.entity.ExpenseEntryEntity
 import com.carownerassistant.core.database.entity.FuelEntryEntity
+import com.carownerassistant.core.database.entity.HandbookDocumentEntity
+import com.carownerassistant.core.database.entity.HandbookSectionEntity
 import com.carownerassistant.core.database.entity.MileageEntryEntity
 import com.carownerassistant.core.database.entity.ServiceEntryEntity
 import com.carownerassistant.core.database.entity.ServicePartItemEntity
 import com.carownerassistant.core.database.entity.ServiceWorkItemEntity
+import com.carownerassistant.core.database.entity.VehicleHandbookEntity
 import com.carownerassistant.core.database.entity.VehicleEntity
 
 @Database(
@@ -26,8 +30,11 @@ import com.carownerassistant.core.database.entity.VehicleEntity
         ServiceEntryEntity::class,
         ServiceWorkItemEntity::class,
         ServicePartItemEntity::class,
+        VehicleHandbookEntity::class,
+        HandbookSectionEntity::class,
+        HandbookDocumentEntity::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -36,6 +43,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun fuelDao(): FuelDao
     abstract fun expenseDao(): ExpenseDao
     abstract fun serviceDao(): ServiceDao
+    abstract fun handbookDao(): HandbookDao
 
     companion object {
         const val NAME: String = "car_owner_assistant.db"
@@ -158,6 +166,41 @@ abstract class AppDatabase : RoomDatabase() {
                         title TEXT NOT NULL,
                         quantity INTEGER NOT NULL,
                         totalAmount REAL NOT NULL
+                    )
+                    """.trimIndent(),
+                )
+            }
+        }
+
+        val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS vehicle_handbook (
+                        vehicleId TEXT NOT NULL PRIMARY KEY,
+                        vin TEXT NOT NULL
+                    )
+                    """.trimIndent(),
+                )
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS handbook_section (
+                        handbookSectionId TEXT NOT NULL PRIMARY KEY,
+                        vehicleId TEXT NOT NULL,
+                        sectionId TEXT NOT NULL,
+                        content TEXT NOT NULL
+                    )
+                    """.trimIndent(),
+                )
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS handbook_document (
+                        documentId TEXT NOT NULL PRIMARY KEY,
+                        vehicleId TEXT NOT NULL,
+                        displayName TEXT NOT NULL,
+                        mimeType TEXT NOT NULL,
+                        filePath TEXT NOT NULL,
+                        createdAtEpochMillis INTEGER NOT NULL
                     )
                     """.trimIndent(),
                 )
