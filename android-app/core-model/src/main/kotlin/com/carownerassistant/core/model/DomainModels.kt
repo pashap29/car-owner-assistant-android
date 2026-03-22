@@ -251,3 +251,40 @@ data class VehicleHandbookSummary(
     val sections: List<HandbookSectionSummary>,
     val documents: List<VehicleDocumentSummary>,
 )
+
+enum class PlaceType {
+    GAS_STATION,
+    SERVICE_CENTER,
+    TIRE_SHOP,
+}
+
+data class GeoPoint(
+    val latitude: Double,
+    val longitude: Double,
+)
+
+data class PlaceRef(
+    val providerKey: String,
+    val providerPlaceId: String,
+    val normalizedPlaceId: String,
+)
+
+data class PlaceInfo(
+    val ref: PlaceRef,
+    val type: PlaceType,
+    val displayName: String,
+    val formattedAddress: String,
+    val coordinates: GeoPoint,
+    val distanceKm: Double?,
+    val phone: String?,
+    val rating: Double?,
+    val reviewCount: Int?,
+    val normalizedTags: List<String>,
+    val isFavorite: Boolean,
+)
+
+data class PlaceSearchCriteria(
+    val center: GeoPoint,
+    val radiusKm: Int,
+    val types: Set<PlaceType>,
+)

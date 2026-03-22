@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 fun SettingsTabScreen(
     onOpenGarage: () -> Unit,
     onOpenHandbook: () -> Unit,
+    onOpenPlaces: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -27,6 +28,9 @@ fun SettingsTabScreen(
         }
         Button(onClick = onOpenHandbook) {
             Text(text = "Open Vehicle Handbook")
+        }
+        Button(onClick = onOpenPlaces) {
+            Text(text = "Open Map and Places")
         }
     }
 }

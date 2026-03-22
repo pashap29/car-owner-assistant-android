@@ -6,6 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.carownerassistant.core.database.dao.FuelDao
 import com.carownerassistant.core.database.dao.HandbookDao
+import com.carownerassistant.core.database.dao.PlaceFavoriteDao
 import com.carownerassistant.core.database.dao.ExpenseDao
 import com.carownerassistant.core.database.dao.MileageDao
 import com.carownerassistant.core.database.dao.ServiceDao
@@ -15,6 +16,7 @@ import com.carownerassistant.core.database.entity.FuelEntryEntity
 import com.carownerassistant.core.database.entity.HandbookDocumentEntity
 import com.carownerassistant.core.database.entity.HandbookSectionEntity
 import com.carownerassistant.core.database.entity.MileageEntryEntity
+import com.carownerassistant.core.database.entity.PlaceFavoriteEntity
 import com.carownerassistant.core.database.entity.ServiceEntryEntity
 import com.carownerassistant.core.database.entity.ServicePartItemEntity
 import com.carownerassistant.core.database.entity.ServiceWorkItemEntity
@@ -33,8 +35,9 @@ import com.carownerassistant.core.database.entity.VehicleEntity
         VehicleHandbookEntity::class,
         HandbookSectionEntity::class,
         HandbookDocumentEntity::class,
+        PlaceFavoriteEntity::class,
     ],
-    version = 7,
+    version = 8,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -44,6 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun serviceDao(): ServiceDao
     abstract fun handbookDao(): HandbookDao
+    abstract fun placeFavoriteDao(): PlaceFavoriteDao
 
     companion object {
         const val NAME: String = "car_owner_assistant.db"
@@ -201,6 +205,29 @@ abstract class AppDatabase : RoomDatabase() {
                         mimeType TEXT NOT NULL,
                         filePath TEXT NOT NULL,
                         createdAtEpochMillis INTEGER NOT NULL
+                    )
+                    """.trimIndent(),
+                )
+            }
+        }
+
+        val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS place_favorite (
+                        normalizedPlaceId TEXT NOT NULL PRIMARY KEY,
+                        providerKey TEXT NOT NULL,
+                        providerPlaceId TEXT NOT NULL,
+                        placeType TEXT NOT NULL,
+                        displayName TEXT NOT NULL,
+                        formattedAddress TEXT NOT NULL,
+                        latitude REAL NOT NULL,
+                        longitude REAL NOT NULL,
+                        phone TEXT,
+                        rating REAL,
+                        reviewCount INTEGER,
+                        tagsCsv TEXT NOT NULL
                     )
                     """.trimIndent(),
                 )

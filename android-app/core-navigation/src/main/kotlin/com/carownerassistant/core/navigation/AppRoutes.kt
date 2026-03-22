@@ -12,6 +12,7 @@ object AppRoutes {
     const val MILEAGE_ENTRY = "mileage_entry"
     const val BACKUP_RESTORE = "backup_restore"
     const val VEHICLE_HANDBOOK = "vehicle_handbook"
+    const val PLACES = "places"
 }
 
 val BottomTabRoutes = listOf(

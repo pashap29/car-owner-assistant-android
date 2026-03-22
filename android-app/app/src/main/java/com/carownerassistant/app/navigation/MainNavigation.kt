@@ -22,18 +22,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.carownerassistant.core.files.AppFileStore
+import com.carownerassistant.core.flags.FeatureFlagRepository
 import com.carownerassistant.core.navigation.AppRoutes
 import com.carownerassistant.core.navigation.BottomTabRoutes
 import com.carownerassistant.core.model.repository.ExpenseRepository
 import com.carownerassistant.core.model.repository.FuelRepository
 import com.carownerassistant.core.model.repository.HandbookRepository
 import com.carownerassistant.core.model.repository.MileageRepository
+import com.carownerassistant.core.model.repository.PlacesRepository
 import com.carownerassistant.core.model.repository.ServiceRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
 import com.carownerassistant.core.model.repository.VehicleRepository
 import com.carownerassistant.feature.expense.ExpenseTabScreen
 import com.carownerassistant.feature.fuel.FuelTabScreen
 import com.carownerassistant.feature.mileage.MileageRoute
+import com.carownerassistant.feature.search.PlacesRoute
 import com.carownerassistant.feature.service.ServiceTabScreen
 import com.carownerassistant.feature.settings.SettingsTabScreen
 import com.carownerassistant.feature.statistics.StatisticsTabScreen
@@ -62,8 +65,10 @@ fun MainNavigation(
     handbookRepository: HandbookRepository,
     expenseRepository: ExpenseRepository,
     mileageRepository: MileageRepository,
+    placesRepository: PlacesRepository,
     serviceRepository: ServiceRepository,
     settingsRepository: SettingsRepository,
+    featureFlagRepository: FeatureFlagRepository,
     appFileStore: AppFileStore,
 ) {
     val navController = rememberNavController()
@@ -132,6 +137,13 @@ fun MainNavigation(
                     onBack = { navController.popBackStack() },
                 )
             }
+            composable(AppRoutes.PLACES) {
+                PlacesRoute(
+                    placesRepository = placesRepository,
+                    featureFlagRepository = featureFlagRepository,
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable(AppRoutes.FUEL) {
                 FuelTabScreen(
                     vehicleRepository = vehicleRepository,
@@ -163,6 +175,7 @@ fun MainNavigation(
                 SettingsTabScreen(
                     onOpenGarage = { navController.navigate(AppRoutes.GARAGE) },
                     onOpenHandbook = { navController.navigate(AppRoutes.VEHICLE_HANDBOOK) },
+                    onOpenPlaces = { navController.navigate(AppRoutes.PLACES) },
                 )
             }
         }

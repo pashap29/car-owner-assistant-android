@@ -10,6 +10,9 @@ import com.carownerassistant.core.model.HandbookSectionId
 import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.MileageLedgerSummary
 import com.carownerassistant.core.model.MileageEntrySummary
+import com.carownerassistant.core.model.PlaceInfo
+import com.carownerassistant.core.model.PlaceRef
+import com.carownerassistant.core.model.PlaceSearchCriteria
 import com.carownerassistant.core.model.ServiceEntryDraft
 import com.carownerassistant.core.model.ServiceEntrySummary
 import com.carownerassistant.core.model.VehicleHandbookSummary
@@ -81,4 +84,28 @@ interface HandbookRepository {
         mimeType: String,
         filePath: String,
     ): String
+}
+
+sealed interface PlaceGatewayResult<out T> {
+    data class Success<T>(val value: T) : PlaceGatewayResult<T>
+    data object NoNetwork : PlaceGatewayResult<Nothing>
+    data object PermissionDenied : PlaceGatewayResult<Nothing>
+    data object ProviderUnavailable : PlaceGatewayResult<Nothing>
+    data class InvalidRequest(val reason: String) : PlaceGatewayResult<Nothing>
+}
+
+interface PlaceSearchGateway {
+    suspend fun search(criteria: PlaceSearchCriteria): PlaceGatewayResult<List<PlaceInfo>>
+}
+
+interface PlaceDetailsGateway {
+    suspend fun getDetails(placeRef: PlaceRef): PlaceGatewayResult<PlaceInfo>
+}
+
+interface PlacesRepository {
+    fun observeFavorites(): Flow<List<PlaceInfo>>
+    suspend fun searchPlaces(criteria: PlaceSearchCriteria): PlaceGatewayResult<List<PlaceInfo>>
+    suspend fun getPlaceDetails(placeRef: PlaceRef): PlaceGatewayResult<PlaceInfo>
+    suspend fun addFavorite(place: PlaceInfo)
+    suspend fun removeFavorite(normalizedPlaceId: String)
 }
