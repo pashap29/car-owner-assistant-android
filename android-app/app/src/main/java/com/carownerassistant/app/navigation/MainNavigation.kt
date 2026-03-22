@@ -27,6 +27,7 @@ import com.carownerassistant.core.navigation.BottomTabRoutes
 import com.carownerassistant.core.model.repository.ExpenseRepository
 import com.carownerassistant.core.model.repository.FuelRepository
 import com.carownerassistant.core.model.repository.MileageRepository
+import com.carownerassistant.core.model.repository.ServiceRepository
 import com.carownerassistant.core.model.repository.SettingsRepository
 import com.carownerassistant.core.model.repository.VehicleRepository
 import com.carownerassistant.feature.expense.ExpenseTabScreen
@@ -58,6 +59,7 @@ fun MainNavigation(
     fuelRepository: FuelRepository,
     expenseRepository: ExpenseRepository,
     mileageRepository: MileageRepository,
+    serviceRepository: ServiceRepository,
     settingsRepository: SettingsRepository,
     appFileStore: AppFileStore,
 ) {
@@ -136,6 +138,8 @@ fun MainNavigation(
             }
             composable(AppRoutes.SERVICE) {
                 ServiceTabScreen(
+                    vehicleRepository = vehicleRepository,
+                    serviceRepository = serviceRepository,
                     onOpenMileage = { navController.navigate(AppRoutes.MILEAGE_LEDGER) },
                 )
             }

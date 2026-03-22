@@ -54,6 +54,22 @@ internal suspend fun persistMileageEntry(
     return entryId
 }
 
+internal suspend fun deleteMileageEntry(
+    database: AppDatabase,
+    vehicleId: String,
+    mileageEntryId: String,
+) {
+    val mileageDao = database.mileageDao()
+    mileageDao.deleteById(mileageEntryId)
+    val remainingEntries = mileageDao.getForVehicle(vehicleId)
+    val reevaluated = MileageLedgerEvaluator.evaluate(
+        entries = remainingEntries.map { it.toRawEntry() },
+    )
+    mileageDao.upsertAll(
+        entries = reevaluated.map { it.toEntity() },
+    )
+}
+
 internal fun MileageEntryEntity.toRawEntry(): RawMileageEntry {
     return RawMileageEntry(
         id = mileageEntryId,

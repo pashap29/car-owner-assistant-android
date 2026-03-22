@@ -7,15 +7,27 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.carownerassistant.core.database.dao.FuelDao
 import com.carownerassistant.core.database.dao.ExpenseDao
 import com.carownerassistant.core.database.dao.MileageDao
+import com.carownerassistant.core.database.dao.ServiceDao
 import com.carownerassistant.core.database.dao.VehicleDao
 import com.carownerassistant.core.database.entity.ExpenseEntryEntity
 import com.carownerassistant.core.database.entity.FuelEntryEntity
 import com.carownerassistant.core.database.entity.MileageEntryEntity
+import com.carownerassistant.core.database.entity.ServiceEntryEntity
+import com.carownerassistant.core.database.entity.ServicePartItemEntity
+import com.carownerassistant.core.database.entity.ServiceWorkItemEntity
 import com.carownerassistant.core.database.entity.VehicleEntity
 
 @Database(
-    entities = [VehicleEntity::class, MileageEntryEntity::class, FuelEntryEntity::class, ExpenseEntryEntity::class],
-    version = 5,
+    entities = [
+        VehicleEntity::class,
+        MileageEntryEntity::class,
+        FuelEntryEntity::class,
+        ExpenseEntryEntity::class,
+        ServiceEntryEntity::class,
+        ServiceWorkItemEntity::class,
+        ServicePartItemEntity::class,
+    ],
+    version = 6,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -23,6 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun mileageDao(): MileageDao
     abstract fun fuelDao(): FuelDao
     abstract fun expenseDao(): ExpenseDao
+    abstract fun serviceDao(): ServiceDao
 
     companion object {
         const val NAME: String = "car_owner_assistant.db"
@@ -103,6 +116,50 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 database.execSQL(
                     "ALTER TABLE fuel_entry ADD COLUMN qrPayloadRaw TEXT",
+                )
+            }
+        }
+
+        val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS service_entry (
+                        serviceEntryId TEXT NOT NULL PRIMARY KEY,
+                        vehicleId TEXT NOT NULL,
+                        timestampEpochMillis INTEGER NOT NULL,
+                        title TEXT NOT NULL,
+                        notes TEXT NOT NULL,
+                        totalAmount REAL NOT NULL,
+                        address TEXT,
+                        phone TEXT,
+                        contact TEXT,
+                        odometerKm REAL,
+                        odometerMi REAL,
+                        linkedMileageEntryId TEXT
+                    )
+                    """.trimIndent(),
+                )
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS service_work_item (
+                        serviceWorkItemId TEXT NOT NULL PRIMARY KEY,
+                        serviceEntryId TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        totalAmount REAL NOT NULL
+                    )
+                    """.trimIndent(),
+                )
+                database.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS service_part_item (
+                        servicePartItemId TEXT NOT NULL PRIMARY KEY,
+                        serviceEntryId TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        quantity INTEGER NOT NULL,
+                        totalAmount REAL NOT NULL
+                    )
+                    """.trimIndent(),
                 )
             }
         }

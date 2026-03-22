@@ -2,13 +2,15 @@ package com.carownerassistant.core.model.repository
 
 import com.carownerassistant.core.model.AppStartMode
 import com.carownerassistant.core.model.ExpenseEntryDraft
+import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.ExpenseFilter
 import com.carownerassistant.core.model.FuelEntryDraft
-import com.carownerassistant.core.model.MileageEntryDraft
-import com.carownerassistant.core.model.ExpenseEntrySummary
 import com.carownerassistant.core.model.FuelEntrySummary
+import com.carownerassistant.core.model.MileageEntryDraft
 import com.carownerassistant.core.model.MileageLedgerSummary
 import com.carownerassistant.core.model.MileageEntrySummary
+import com.carownerassistant.core.model.ServiceEntryDraft
+import com.carownerassistant.core.model.ServiceEntrySummary
 import com.carownerassistant.core.model.VehicleDraft
 import com.carownerassistant.core.model.VehicleSummary
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +50,9 @@ interface ExpenseRepository {
 }
 
 interface ServiceRepository {
-    fun observeServiceCount(vehicleId: String): Flow<Int>
+    fun observeServices(vehicleId: String): Flow<List<ServiceEntrySummary>>
+    suspend fun createServiceEntry(draft: ServiceEntryDraft): String
+    suspend fun updateServiceEntry(serviceEntryId: String, draft: ServiceEntryDraft)
 }
 
 interface SettingsRepository {

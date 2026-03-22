@@ -180,3 +180,43 @@ data class ExpenseFilter(
     val query: String = "",
     val category: ExpenseCategory? = null,
 )
+
+data class ServiceWorkItem(
+    val title: String,
+    val totalAmount: Double,
+)
+
+data class ServicePartItem(
+    val title: String,
+    val quantity: Int,
+    val totalAmount: Double,
+)
+
+data class ServiceEntrySummary(
+    val id: String,
+    val vehicleId: String,
+    val timestampEpochMillis: Long,
+    val title: String,
+    val notes: String,
+    val totalAmount: Double,
+    val address: String?,
+    val phone: String?,
+    val contact: String?,
+    val workItems: List<ServiceWorkItem>,
+    val partItems: List<ServicePartItem>,
+    val mileageReading: OdometerReading?,
+)
+
+data class ServiceEntryDraft(
+    val vehicleId: String,
+    val timestampEpochMillis: Long,
+    val title: String,
+    val notes: String,
+    val address: String?,
+    val phone: String?,
+    val contact: String?,
+    val workItems: List<ServiceWorkItem>,
+    val partItems: List<ServicePartItem>,
+    val mileageValue: Double?,
+    val mileageUnit: DistanceUnit?,
+)

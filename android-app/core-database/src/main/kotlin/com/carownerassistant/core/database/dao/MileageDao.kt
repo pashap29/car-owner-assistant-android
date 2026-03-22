@@ -17,4 +17,7 @@ interface MileageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(entries: List<MileageEntryEntity>)
+
+    @Query("DELETE FROM mileage_entry WHERE mileageEntryId = :mileageEntryId")
+    suspend fun deleteById(mileageEntryId: String)
 }
